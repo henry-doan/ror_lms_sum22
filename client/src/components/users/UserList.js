@@ -1,4 +1,5 @@
 import { ListGroup, Button } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 
 const UserList = ({ users }) => (
   <>
@@ -7,7 +8,9 @@ const UserList = ({ users }) => (
       { users.map( u => 
         <ListGroup.Item>
           {u.first} {u.last} 
-          <Button>Show</Button>
+          <Link to={`/users/${u.id}`}>
+            <Button>Show</Button>
+          </Link>
         </ListGroup.Item>
       )}
     </ListGroup>
