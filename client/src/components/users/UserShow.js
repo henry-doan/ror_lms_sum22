@@ -1,12 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import { Modal, Button } from 'react-bootstrap';
+import UserForm from "./UserForm";
+import { UserConsumer } from "../../providers/UserProvider";
 
-const UserShow = () => {
+const UserShow = ({ updateUser, deleteUser }) => {
   const { id } = useParams()
   const [user, setUser] = useState({ first: '', last: '', image: '' })
   const { first, last, image } = user 
   const [userCourses, setUserCourses] = useState([])
+  const [editing, setEdit] = useState(false)
 
   useEffect( () => {
     axios.get(`/api/users/${id}`)
@@ -30,8 +34,28 @@ const UserShow = () => {
         alt="profile"
         width='300px'
       />
-      <button>Edit</button>
-      <button>Delete</button>
+      <Button onClick={() => setEdit(true)}>
+        Edit
+      </Button>
+
+      <Modal show={editing} onHide={() => setEdit(false)}>
+        <Modal.Header closeButton>
+        </Modal.Header>
+        <Modal.Body>
+          <UserForm 
+            id={id}
+            first={first}
+            last={last}
+            image={image}
+            setEdit={setEdit}
+            updateUser={updateUser}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Button onClick={() => deleteUser(id)}>
+        Delete
+      </Button>
       <br />
       { userCourses.map( uc => 
         <div>
@@ -44,4 +68,10 @@ const UserShow = () => {
   )
 }
 
-export default UserShow;
+const ConnectedUserShow = (props) => (
+  <UserConsumer>
+    { value => <UserShow {...props} {...value} /> }
+  </UserConsumer>
+)
+
+export default ConnectedUserShow;
