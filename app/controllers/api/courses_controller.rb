@@ -31,6 +31,11 @@ class Api::CoursesController < ApplicationController
     render json: { message: 'Course removed' }
   end
 
+  def courseUsers
+    @course = Course.find(params[:course_id])
+    render json: @course.users 
+  end
+
   private 
     def course_params
       params.require(:course).permit(:title, :desc, :ctype)

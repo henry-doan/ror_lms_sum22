@@ -6,12 +6,19 @@ const UserShow = () => {
   const { id } = useParams()
   const [user, setUser] = useState({ first: '', last: '', image: '' })
   const { first, last, image } = user 
+  const [userCourses, setUserCourses] = useState([])
 
   useEffect( () => {
     axios.get(`/api/users/${id}`)
       .then( res => {
         setUser(res.data)
       })
+      .catch( err => console.log(err))
+  }, [])
+
+  useEffect( () => {
+    axios.get(`/api/users/${id}/userCourses`)
+      .then( res => setUserCourses(res.data))
       .catch( err => console.log(err))
   }, [])
 
@@ -25,6 +32,14 @@ const UserShow = () => {
       />
       <button>Edit</button>
       <button>Delete</button>
+      <br />
+      { userCourses.map( uc => 
+        <div>
+          <h1>{uc.title}</h1>
+          <p>{uc.desc}</p>
+          <p>{uc.cType}</p>
+        </div> 
+      )}
     </>
   )
 }

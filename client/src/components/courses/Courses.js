@@ -1,51 +1,12 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, } from 'react';
 import CourseList from './CourseList';
 import CourseForm from './CourseForm';
 import { Modal } from 'react-bootstrap';
 import { MainBtn } from '../styles/shared';
+import { CourseConsumer } from '../../providers/CourseProvider';
 
-const Courses = () => {
-  const [courses, setCourses] = useState([])
+const Courses = ({ addCourse, courses }) => {
   const [adding, setAdd] = useState(false)
-
-  useEffect( () => {
-    axios.get('/api/courses')
-      .then( res => {
-        setCourses(res.data)
-      })
-      .catch( err => console.log(err) )
-  }, [])
-
-  const addCourse = (course) => {
-    axios.post('/api/courses', { course })
-      .then(res => {
-        setCourses([...courses, res.data])
-      })
-      .catch( err => console.log(err) )
-  }
-
-  const updateCourse = (id, course) => {
-    axios.put(`/api/courses/${id}`, { course })
-      .then( res => {
-        let newUpdatedCourses = courses.map( c => {
-          if (c.id === id) {
-            return res.data 
-          }
-          return c
-        })
-        setCourses(newUpdatedCourses)
-      })
-      .catch( err => console.log(err) )
-  }
-
-  const deleteCourse = (id) => {
-    axios.delete(`/api/courses/${id}`)
-      .then(res => {
-        setCourses(courses.filter( c => c.id !== id ))
-      })
-      .catch( err => console.log(err) )
-  }
 
   return (
     <>
@@ -68,4 +29,10 @@ const Courses = () => {
   )
 }
 
-export default Courses;
+const ConnectedCourses = (props) => (
+  <CourseConsumer>
+    { value => <Courses {...props} {...value} />}
+  </CourseConsumer>
+)
+
+export default ConnectedCourses;

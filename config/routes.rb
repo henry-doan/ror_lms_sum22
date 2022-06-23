@@ -5,9 +5,12 @@ Rails.application.routes.draw do
       resources :enrollments 
       get '/unenrolled', to: 'enrollments#unenrolledUsers'
       get '/enrolled', to: 'enrollments#enrolledUsers'
+      get '/courseUsers', to: 'courses#courseUsers'
     end
 
-    resources :users 
+    resources :users do
+      get '/userCourses', to: 'users#userCourses'
+    end
   end
   
 end
