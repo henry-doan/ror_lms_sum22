@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import CourseProvider from './providers/CourseProvider';
 import UserProvider from './providers/UserProvider';
+import EnrollmentProvider from './providers/EnrollmentProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +15,9 @@ root.render(
     <BrowserRouter>
       <CourseProvider>
         <UserProvider>
-          <App />
+          <EnrollmentProvider>
+            <App />
+          </EnrollmentProvider>
         </UserProvider>
       </CourseProvider>
     </BrowserRouter>
